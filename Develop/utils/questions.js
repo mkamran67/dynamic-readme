@@ -35,6 +35,18 @@ const questions = {
   ],
 
   // ->
+  // - At least one badge ✅
+  // - Project title ✅
+  // - Description ✅
+  // - Table of Contents -> Need to generate
+  // - Installation ✅
+  // - Usage ✅
+  // - License
+  // - Contributing
+  // - Tests
+  // - Questions
+  //   - User GitHub profile picture
+  //   - User GitHub email
   projectQueries: [
     {
       type: 'input',
@@ -75,8 +87,14 @@ const questions = {
     },
     {
       type: 'input',
-      name: 'tests',
-      message: 'Tests',
+      name: 'license',
+      message: 'License badge symbol (i.e. MIT, Apache 2, GPL)',
+    },
+    {
+      type: 'checkbox',
+      name: 'licenseColor',
+      message: 'License badge color',
+      choices: [''],
     },
   ],
 };
