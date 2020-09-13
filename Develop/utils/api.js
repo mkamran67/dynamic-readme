@@ -1,16 +1,17 @@
-const api = {
-  // Get Porfile Pic and Email.
-  getUserProfile(userName) {
-    let res = {};
-    axios
-      .get(`https://api.github.com/users/${userName}`)
-      .then(({ avatar_url }) => {
-        res = { avatar_url };
-      })
-      .catch((err) => console.log(err));
+const axios = require('axios');
 
-    return res;
-  },
+// Get Porfile Pic and Email.
+module.exports = async function getUserProfile(userName) {
+  let res = {};
+  await axios
+    .get(`https://api.github.com/users/${userName}`)
+    .then(({ data: { avatar_url } }) => {
+      res = { avatar_url, isValid: true };
+    })
+    .catch((err) => {
+      console.log(err.message);
+      res = { avatar_url: false, isValid: false, message: err.message };
+    });
+
+  return res;
 };
-
-module.exports = api;

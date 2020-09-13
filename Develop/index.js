@@ -1,77 +1,23 @@
-// Imports
+// Dependencies Imports
 const chalk = require('chalk');
 const figlet = require('figlet');
 const fs = require('fs');
-const axios = require('axios');
 const inquirer = require('inquirer');
+const clear = require('clear');
+const Configstore = require('configstore');
+const packageJson = require('./package.json');
 
-const initQueries = [
-  {
-    type: 'input',
-    name: 'userName',
-    message: "What's your Github username",
-    validate: function (userName) {
-      if (userName.trim() !== '') {
-        return true;
-      }
-      return 'Please enter a valid Github username';
-    },
-  },
-  {
-    type: 'input',
-    name: 'email',
-    message: "What's your Github email",
-    validate: function (email) {
-      const regCheckEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+// Modules Imports
+const getUserProfile = require('./utils/api');
+const {
+  questions: { initQueries, projectQueries },
+} = require('./utils/questions');
 
-      if (regCheckEmail.test(String(email).toLowerCase())) {
-        return true;
-      } else {
-        return 'Please enter a valid Github email';
-      }
-    },
-  },
-];
-
-const projectQueries = [
-  {
-    type: 'input',
-    name: 'title',
-    message: 'Project title',
-    validate: function (message) {
-      if (message.trim().length >= 3) {
-        return true;
-      }
-      return 'Please enter at least 3 characters.';
-    },
-  },
-];
-
-function writeToFile(fileName, data) {}
-
-function init() {
-  let userEmail = {};
-
-  // 0. Display App Name
-  introDisplay();
-  // 1. Ask for Github Username & Email. -> 
-  setTimeout(() => {
-    inquirer
-      .prompt(initQueries)
-      .then((answers) =>
-        answers.email
-          ? (userEmail = answers.email)
-          : userEmail = {error : true, message: }
-      );
-  }, 700);
-
-  // 2. Get Project Details.
-}
-
-init();
+// Configstore -> To or Not To store User Settings
+const config = new Configstore(packageJson.name);
 
 function introDisplay() {
-  figlet(`README.md Generator`, (err, data) => {
+  figlet(`Project MarkDown`, (err, data) => {
     if (err) {
       console.log(err);
       return;
@@ -80,3 +26,35 @@ function introDisplay() {
     console.log(`\n`);
   });
 }
+
+function writeToFile(fileName, data) {}
+
+async function init() {
+  // Variables
+  let userAvatar = 'undef';
+
+  // 0. Display App Name
+  // introDisplay();
+
+  // 1. Ask for Github Username & Email. ->
+  await inquirer.prompt(initQueries).then(async (answers) => {
+    // A) fetch Github Avatar Link if Valid-> save avatar link
+    let temp = await getUserProfile(answers.userName);
+
+    // B)
+    if (!temp.isValid) {
+      console.log(temp.message);
+      return;
+    } else {
+      userAvatar = temp.avatar_url;
+    }
+  });
+
+  if (userAvatar !== 'undef') {
+    // 2. Get Project Details.
+    await inquirer.prompt(projectQueries).then(async (answers) => {
+      //
+    });
+  }
+}
+init();
