@@ -12,6 +12,7 @@ const getUserProfile = require('./utils/api');
 const {
   questions: { initQueries, projectQueries },
 } = require('./utils/questions');
+const generateMarkdown = require('./utils/generateMarkdown');
 
 // Configstore -> To or Not To store User Settings
 const config = new Configstore(packageJson.name);
@@ -32,6 +33,8 @@ function writeToFile(fileName, data) {}
 async function init() {
   // Variables
   let userAvatar = 'undef';
+  let userEmail = '';
+  let queryData = {};
 
   // 0. Display App Name
   // introDisplay();
@@ -40,6 +43,7 @@ async function init() {
   await inquirer.prompt(initQueries).then(async (answers) => {
     // A) fetch Github Avatar Link if Valid-> save avatar link
     let temp = await getUserProfile(answers.userName);
+    let userEmail = answers.email;
 
     // B)
     if (!temp.isValid) {
@@ -50,11 +54,30 @@ async function init() {
     }
   });
 
+  // 2. Get Project Details.
   if (userAvatar !== 'undef') {
-    // 2. Get Project Details.
     await inquirer.prompt(projectQueries).then(async (answers) => {
-      //
+      /* 
+        -> title -> Required
+        -> description -> Required
+        -> installation
+        -> usage
+        -> tests
+        -> licenseDescrption
+        -> licenseBadgeSymbol -> Required for Color else ignore.
+        -> licenseBadgeColor 
+        -> contributing
+        -> table of contents -> Must generate
+        -> Questions -> Avatar & Email.
+      */
+      queryData = answers;
     });
   }
+  // One Data Object
+  queryData.avatar = userAvatar;
+  queryData.email = userEmail;
+
+  // Generate Markdown
+  let readmeData = generateMarkdown(queryData);
 }
 init();

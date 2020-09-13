@@ -1,3 +1,5 @@
+const chalk = require('chalk');
+
 // Questions
 const questions = {
   // ->
@@ -38,12 +40,12 @@ const questions = {
   // - At least one badge ✅
   // - Project title ✅
   // - Description ✅
-  // - Table of Contents -> Need to generate
+  // - Table of Contents -> Need to generate after questions
   // - Installation ✅
   // - Usage ✅
-  // - License
-  // - Contributing
-  // - Tests
+  // - License ✅
+  // - Contributing ✅
+  // - Tests ✅
   // - Questions
   //   - User GitHub profile picture
   //   - User GitHub email
@@ -78,7 +80,7 @@ const questions = {
     {
       type: 'input',
       name: 'usage',
-      message: 'Usage examples',
+      message: 'Code usage examples',
     },
     {
       type: 'input',
@@ -87,14 +89,40 @@ const questions = {
     },
     {
       type: 'input',
-      name: 'license',
+      name: 'licenseDescrption',
+      message: 'Your license discription',
+    },
+    {
+      type: 'input',
+      name: 'licenseBadgeSymbol',
       message: 'License badge symbol (i.e. MIT, Apache 2, GPL)',
     },
     {
-      type: 'checkbox',
-      name: 'licenseColor',
-      message: 'License badge color',
-      choices: [''],
+      type: 'rawlist',
+      name: 'licenseBadgeColor',
+      message: 'Chose a license badge color',
+      choices: [
+        `brightgreen`,
+        `green`,
+        `yellowgreen`,
+        `yellow`,
+        `orange`,
+        `red`,
+        `lightgrey`,
+        `blue`,
+      ],
+      validate: function (answer) {
+        if (answer.length < 1) {
+          return 'You must choose at least one color.';
+        }
+
+        return true;
+      },
+    },
+    {
+      type: 'input',
+      name: 'contributing',
+      message: 'How others can contribute to your project: ',
     },
   ],
 };
