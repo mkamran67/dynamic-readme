@@ -28,13 +28,17 @@ function introDisplay() {
   });
 }
 
-function writeToFile(fileName, data) {}
+function writeToFile(fileName, data) {
+  fs.writeFileSync(fileName, data, 'utf8', (err) => console.log(err));
+}
 
 async function init() {
   // Variables
   let userAvatar = 'undef';
   let userEmail = '';
   let queryData = {};
+  let betterObject = {};
+  let licenseBadge = 'https://img.shields.io/badge/license-'; // -> https://img.shields.io/badge/license-MIT-orange
 
   // 0. Display App Name
   // introDisplay();
@@ -43,7 +47,7 @@ async function init() {
   await inquirer.prompt(initQueries).then(async (answers) => {
     // A) fetch Github Avatar Link if Valid-> save avatar link
     let temp = await getUserProfile(answers.userName);
-    let userEmail = answers.email;
+    userEmail = answers.email;
 
     // B)
     if (!temp.isValid) {
@@ -57,19 +61,6 @@ async function init() {
   // 2. Get Project Details.
   if (userAvatar !== 'undef') {
     await inquirer.prompt(projectQueries).then(async (answers) => {
-      /* 
-        -> title -> Required
-        -> description -> Required
-        -> installation
-        -> usage
-        -> tests
-        -> licenseDescrption
-        -> licenseBadgeSymbol -> Required for Color else ignore.
-        -> licenseBadgeColor 
-        -> contributing
-        -> table of contents -> Must generate
-        -> Questions -> Avatar & Email.
-      */
       queryData = answers;
     });
   }
@@ -77,7 +68,26 @@ async function init() {
   queryData.avatar = userAvatar;
   queryData.email = userEmail;
 
+  // Create an a better object -> remove empty pairs -> Append badge
+  for (const [key, val] of Object.entries(queryData)) {
+    if (key === 'licenseBadgeSymbol') {
+      licenseBadge += val.toUpperCase();
+    } else if (key === 'licenseBadgeColor') {
+      licenseBadge += `-${val}`;
+    } else if (val !== '') {
+      betterObject[`${key}`] = val;
+    }
+  }
+
+  betterObject.badge = licenseBadge;
+
+  console.log(betterObject);
+
   // Generate Markdown
-  let readmeData = generateMarkdown(queryData);
+  let readmeData = generateMarkdown(betterObject);
+
+  writeToFile('README.md', readmeData);
+
+  console.log(readmeData);
 }
 init();

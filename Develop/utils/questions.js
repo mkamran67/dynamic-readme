@@ -89,6 +89,11 @@ const questions = {
     },
     {
       type: 'input',
+      name: 'contributing',
+      message: 'How can others contribute to your project: ',
+    },
+    {
+      type: 'input',
       name: 'licenseDescrption',
       message: 'Your license discription',
     },
@@ -96,6 +101,12 @@ const questions = {
       type: 'input',
       name: 'licenseBadgeSymbol',
       message: 'License badge symbol (i.e. MIT, Apache 2, GPL)',
+      validate: function (licenseBadgeSymbol) {
+        if (licenseBadgeSymbol.length >= 1) {
+          return true;
+        }
+        return 'Please enter at least 3 characters.';
+      },
     },
     {
       type: 'rawlist',
@@ -118,11 +129,6 @@ const questions = {
 
         return true;
       },
-    },
-    {
-      type: 'input',
-      name: 'contributing',
-      message: 'How others can contribute to your project: ',
     },
   ],
 };
