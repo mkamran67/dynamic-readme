@@ -1,17 +1,17 @@
 /* -> Object Structure
- {
-  title: 'ReadMe Creator',
-  description: "It's a very basic function crap thing magigy",
-  installation: 'umm idk i copy past',
-  usage: 'something node',
+{
+  title: 'this is a title',
+  description: 'git project descr',
+  installation: 'step uno',
+  usage: 'there is no usage',
   tests: 'none',
-  licenseDescrption: 'only 6 ft tall women can use it',
-  licenseBadgeSymbol: 'MIT',
-  licenseBadgeColor: 'green',
-  contributing: "they can't its too good",
-  avatar: 'https://avatars3.githubusercontent.com/u/39231643?v=4',
-  email: ''
-  }
+  contributing: 'they cant',
+  licenseDescrption: 'wadwadawdawd acp[y',
+  avatar: 'https://avatars2.githubusercontent.com/u/415313?v=4',
+  email: 'usm@gm.co',
+  badge: 'https://img.shields.io/badge/license-MIT-green'
+}
+
 */
 
 function generateMarkdown(data) {

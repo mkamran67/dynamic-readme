@@ -94,7 +94,7 @@ const questions = {
     },
     {
       type: 'input',
-      name: 'licenseDescrption',
+      name: 'licenseDescription',
       message: 'Your license discription',
     },
     {
